@@ -10,7 +10,7 @@ export interface User {
   password: string;
   bio: string;
   quizAnswers: number[];
-  registeredEvents: Event[];
+  registeredEvents: string[]; 
 }
 
 export interface Event {
@@ -19,7 +19,7 @@ export interface Event {
   date: string;
   time: string;
   location: string;
-  attendees: User[];
+  attendees: string[];   
   description: string;
   code: number;
 }
