@@ -43,6 +43,7 @@ function defaultData(): DataStore {
   return {
     users: [],
     events: [],
+    recipes: []
   };
 }
 
