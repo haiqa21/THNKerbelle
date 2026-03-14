@@ -1,6 +1,7 @@
 export interface DataStore {
   users: User[];
   events: Event[];
+  recipes: Recipe[];
 }
 
 export interface User {
@@ -11,6 +12,10 @@ export interface User {
   bio: string;
   quizAnswers: number[];
   registeredEvents: string[]; 
+  coins: number;
+  currentRecipe: Recipe | null; 
+  recipeProgress: number;
+  completedRecipes: number[];
 }
 
 export interface Event {
@@ -22,4 +27,11 @@ export interface Event {
   attendees: string[];   
   description: string;
   code: number;
+}
+
+export interface Recipe {
+  id: string;
+  name: string;
+  steps: string[];
+  pointCosts: number[]; 
 }
