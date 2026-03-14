@@ -6,16 +6,19 @@ import fs from 'fs';
 import path from 'path';
 import process from 'process';
 // import authRoutes  from './routes/auth.js'
+import authRoutes from './routes/auth';
+
 
 const app = express()
 const PORT = process.env.PORT || 3000
 
 // Middleware
 app.use(cors())                    // allow requests from your React Native app
-app.use(json())            // parse JSON request bodies
+app.use(json())                   // parse JSON request bodies
 app.use(morgan('dev'));
+
 // Routes
-// app.use('/auth',  authRoutes)
+app.use('/auth', authRoutes); 
 
 
 // Health check — useful for Railway/Render deployment
