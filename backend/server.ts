@@ -1,5 +1,6 @@
 import express, { json, Request, Response } from 'express';
-import { getData, saveData } from './db/dataStore.js'
+import { loadData, writeDataFile } from './db/dataStore.js'
+import { User } from './interfaces';
 import cors from 'cors'
 import morgan from 'morgan';
 import YAML from 'yaml';
@@ -30,7 +31,7 @@ app.listen(PORT, () => {
 // listing all the events registered by the user
 app.get('/events', (req: Request, res: Response) => {
   const userId = req.header('userId');
-  const data = getData();
+  const data = loadData();
   const userObj: User | undefined = data.users.find(
     (user: User) => userId === user.id);
   if (!userObj) {

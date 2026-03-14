@@ -1,11 +1,9 @@
 import { DataStore } from '../interfaces.ts';
 import fs from 'fs';
+import path from "path";
+const dataFile = path.join(process.cwd(), 'dataFile.json');
 
-// YOU MAY MODIFY THIS OBJECT BELOW
-let data = {
-  users: [],
-  events: []
-};
+
 
 // YOU MAY MODIFY THIS OBJECT ABOVE
 
@@ -23,61 +21,40 @@ Example usage
 */
 
 // Use getData() to access the data
+/*
 function getData() {
   return data;
 }
-
-function loadData() {
-  const dataString = fs.readFileSync('./database.json', 'utf-8');
-  data = JSON.parse(dataString);
-}
-
-function saveData() {
-  const dataStore = getData();
-  const dataString = JSON.stringify(dataStore, null, 2);
-  fs.writeFileSync('./database.json', dataString);
-}
-
-export { getData, loadData, saveData };
-
-import { DataStore } from '../interfaces';
-import fs from 'fs';
-
-// YOU MAY MODIFY THIS OBJECT BELOW
-let data = {
-  users: [],
-  events: []
-};
-
-// YOU MAY MODIFY THIS OBJECT ABOVE
-
-// YOU SHOULDNT NEED TO MODIFY THE FUNCTIONS BELOW IN ITERATION 1
-
-/*
-Example usage
-  let store = getData()
-  console.log(store) # Prints { 'names': ['Hayden', 'Tam', 'Rani', 'Giuliana', 'Rando'] }
-
-  store.names.pop() // Removes the last name from the names array
-  store.names.push('Jake') // Adds 'Jake' to the end of the names array
-
-  console.log(store) # Prints { 'names': ['Hayden', 'Tam', 'Rani', 'Giuliana', 'Jake'] }
 */
 
-// Use getData() to access the data
-function getData() {
-  return data;
+let cachedData: DataStore = readDataFile(); // Load once at startup
+
+function readDataFile(): DataStore {
+  try {
+    const data = fs.readFileSync(dataFile, 'utf-8');
+    return JSON.parse(data);
+  } catch (e) {
+    console.error('Error while reading data file:', e);
+    return defaultData();
+  }
 }
 
-function loadData() {
-  const dataString = fs.readFileSync('./database.json', 'utf-8');
-  data = JSON.parse(dataString);
+function defaultData(): DataStore {
+  return {
+    users: [],
+    events: [],
+  };
 }
 
-function saveData() {
-  const dataStore = getData();
-  const dataString = JSON.stringify(dataStore, null, 2);
-  fs.writeFileSync('./database.json', dataString);
+function loadData(): DataStore {
+  return cachedData;
 }
 
-export { getData, loadData, saveData };
+
+function writeDataFile(data: DataStore): void {
+  cachedData = data; // Update memory cache
+  fs.writeFileSync(dataFile, JSON.stringify(data, null, 2));
+}
+
+export {loadData, writeDataFile };
+
