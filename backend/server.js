@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 3000
 // Middleware
 app.use(cors())                    // allow requests from your React Native app
 app.use(express.json())            // parse JSON request bodies
-
+app.use(morgan('dev'));
 // Routes
 // app.use('/auth',  authRoutes)
 
