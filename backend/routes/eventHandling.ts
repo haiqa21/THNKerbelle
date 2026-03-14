@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { loadData, writeDataFile } from '../db/dataStore';
+import { User } from '../interfaces';
 
 const router = Router();
 
@@ -43,4 +44,35 @@ router.post('/events/:eventId/join', (req: Request, res: Response) => {
   return res.json({ success: true, event })
 })
 
+router.post('/events/:eventId/event', (req: Request, res: Response) => {
+    const eventId = String(req.params.eventId);
+    const {userId} = req.body
+    const data = loadData();
+
+    const event = data.events.find(e => e.id === eventId);
+    if (!event) return res.status(404).json({ error: 'Event not found' });
+
+    // find the current user
+    const currentUser = data.users.find(u => u.id === userId);
+    if (!currentUser) return res.status(404).json({ error: 'User not found' });
+
+    // get all attendees except the current user
+    const attendees = data.users.filter(u => 
+        event.attendees.includes(u.id) && u.id !== userId
+    );
+
+    // score each attendee by how many quiz answers match
+    const scored = attendees.map(attendee => {
+    let matchScore = 0;
+    for (let i = 0; i < currentUser.quizAnswers.length; i++) {
+        if (attendee.quizAnswers[i] === currentUser.quizAnswers[i])
+            matchScore++;
+        }
+        return { id: attendee.id, name: attendee.name, bio: attendee.bio, matchScore };
+    });
+
+    scored.sort((a, b) => b.matchScore - a.matchScore);
+    return res.json({ people: scored });
+
+});
 export default router;
