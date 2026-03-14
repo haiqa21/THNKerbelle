@@ -20,3 +20,17 @@ app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`)
   console.log(`   app.db auto-created next to server.js if it didn't exist`)
 })
+
+
+app.post('/v1/admin/auth/register', (req: Request, res: Response) => {
+  const { email, password, nameFirst, nameLast } = req.body;
+
+  try {
+    const result = adminAuthRegister(email, password, nameFirst, nameLast);
+    const sessionId = createSession(result.userId);
+    return res.json({ session: sessionId });
+  } catch (err) {
+    const message = (err as Error).message;
+    return res.status(400).json({ error: message });
+  }
+});
