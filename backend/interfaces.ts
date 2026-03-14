@@ -1,9 +1,9 @@
-interface DataStore {
+export interface DataStore {
   users: User[];
   events: Event[];
 }
 
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
@@ -13,7 +13,7 @@ interface User {
   registeredEvents: Event[];
 }
 
-interface Event {
+export interface Event {
   id: string;
   name: string;
   date: string;
