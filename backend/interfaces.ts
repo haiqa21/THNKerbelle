@@ -1,25 +1,25 @@
-interface DataStore {
+export interface DataStore {
   users: User[];
   events: Event[];
 }
 
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
   password: string;
   bio: string;
   quizAnswers: number[];
-  registeredEvents: Event[];
+  registeredEvents: string[]; 
 }
 
-interface Event {
+export interface Event {
   id: string;
   name: string;
   date: string;
   time: string;
   location: string;
-  attendees: User[];
+  attendees: string[];   
   description: string;
   code: number;
 }
