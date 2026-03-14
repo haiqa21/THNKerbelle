@@ -39,5 +39,5 @@ router.post('/login', async (req: Request, res: Response) => {
   res.json({ message: 'Login successful', user: { id: user.id, name: user.name } });
 });
 
-
+export default router;
 

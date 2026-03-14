@@ -3,11 +3,8 @@ import { loadData, writeDataFile } from './db/dataStore.js'
 import { User } from './interfaces';
 import cors from 'cors'
 import morgan from 'morgan';
-import YAML from 'yaml';
-import fs from 'fs';
-import path from 'path';
 import process from 'process';
-// import authRoutes  from './routes/auth.js'
+import authRoutes from './routes/auth.ts'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -17,7 +14,7 @@ app.use(cors())                    // allow requests from your React Native app
 app.use(json())            // parse JSON request bodies
 app.use(morgan('dev'));
 // Routes
-// app.use('/auth',  authRoutes)
+app.use('/auth', authRoutes)
 
 
 // Health check — useful for Railway/Render deployment
