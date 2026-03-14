@@ -20,4 +20,20 @@ router.post('/register', (req, res) => {
 
 })
 
+// login end point
+router.post('/login', (req, res) => {
+
+  const { email, password } = req.body
+
+  if (!email || !password) {
+    return res.status(400).json({ error: "Missing email or password" })
+  }
+
+  // later you will check database
+  res.json({
+    message: "Login successful"
+  })
+
+})
+
 export default router
