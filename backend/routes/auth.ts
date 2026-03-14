@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import { getData, saveData } from '../db/dataStore';
+import { loadData, writeDataFile } from '../db/dataStore';
 import { User } from '../interfaces';
 import bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
@@ -9,7 +9,7 @@ const router = Router();
 // Register
 router.post('/register', async (req: Request, res: Response) => {
   const { name, email, password, bio } = req.body;
-  const data = getData();
+  const data = loadData();
 
   if (!name || !email || !password) return res.status(400).json({ error: 'Missing fields' });
   if (data.users.find(u => u.email === email)) return res.status(400).json({ error: 'Email exists' });
@@ -18,7 +18,7 @@ router.post('/register', async (req: Request, res: Response) => {
   const newUser: User = { id: uuid(), name, email, password: hashedPassword, bio: bio || '', quizAnswers: [], registeredEvents: [] };
   
   data.users.push(newUser);
-  saveData();
+  writeDataFile(data);
 
   res.status(201).json({ message: 'Registered', userId: newUser.id });
 });
@@ -26,7 +26,7 @@ router.post('/register', async (req: Request, res: Response) => {
 // Login
 router.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const data = getData();
+  const data = loadData();
   const user = data.users.find(u => u.email === email);
   if (!user) return res.status(400).json({ error: 'Invalid credentials' });
 
