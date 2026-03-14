@@ -36,4 +36,16 @@ router.post('/login', async (req: Request, res: Response) => {
   res.json({ message: 'Login successful', user: { id: user.id, name: user.name } });
 });
 
+
+// Get /events - list all events
+router.get('/events', async (req: Request, res: Response) => {
+  const { userId } = req.body;
+  const data = loadData();
+  const user = data.users.find(u => u.id === userId);
+  if(!user){
+    return res.status(400).json({ error: 'Invalid User' });
+  }
+  return res.json(user?.registeredEvents)
+});
+
 export default router;
