@@ -51,4 +51,33 @@ router.get('/events', async (req: Request, res: Response) => {
   return res.json(user?.registeredEvents)
 });
 
+router.post('/events/:eventId/join', (req: Request, res: Response) => {
+  const eventId = String(req.params.eventId);
+  const { code, userId } = req.body
+
+  const data = loadData()
+
+  // find the event
+  const event = data.events.find(e => e.id === eventId)
+  if (!event) {
+    return res.status(404).json({ error: 'Event not found' })
+  }
+
+  // check the code
+  if (event.code !== code) {
+    return res.status(401).json({ error: 'Incorrect event code' })
+  }
+
+  // check if user already joined
+  if (event.attendees.includes(userId)) {
+    return res.json({ success: true, event })
+  }
+
+  // add user to attendees
+  event.attendees.push(userId)
+  writeDataFile(data)
+
+  return res.json({ success: true, event })
+})
+
 export default router;
