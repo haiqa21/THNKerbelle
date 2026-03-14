@@ -1,131 +1,60 @@
-import { DataStore, User, Event } from '../interfaces';
+import { DataStore } from '../interfaces.ts';
 import fs from 'fs';
-import { v4 as uuid } from 'uuid';
-import bcrypt from 'bcryptjs';
+import path from "path";
+const dataFile = path.join(process.cwd(), 'dataFile.json');
 
-// Initial in-memory store
-let data: DataStore = {
-  users: [],
-  events: []
-};
 
-// ---------- Basic Functions ----------
 
-// Access current data
-function getData(): DataStore {
+// YOU MAY MODIFY THIS OBJECT ABOVE
+
+// YOU SHOULDNT NEED TO MODIFY THE FUNCTIONS BELOW IN ITERATION 1
+
+/*
+Example usage
+  let store = getData()
+  console.log(store) # Prints { 'names': ['Hayden', 'Tam', 'Rani', 'Giuliana', 'Rando'] }
+
+  store.names.pop() // Removes the last name from the names array
+  store.names.push('Jake') // Adds 'Jake' to the end of the names array
+
+  console.log(store) # Prints { 'names': ['Hayden', 'Tam', 'Rani', 'Giuliana', 'Jake'] }
+*/
+
+// Use getData() to access the data
+/*
+function getData() {
   return data;
 }
+*/
 
-// Load from JSON file
-function loadData() {
-  const dataString = fs.readFileSync('./database.json', 'utf-8');
-  data = JSON.parse(dataString);
-}
+let cachedData: DataStore = readDataFile(); // Load once at startup
 
-// Save to JSON file
-function saveData() {
-  fs.writeFileSync('./database.json', JSON.stringify(data, null, 2));
-}
-
-// Register a new user
-async function registerUser(
-  name: string,
-  email: string,
-  password: string,
-  bio = ''
-): Promise<User> {
-  // Check if email exists
-  if (data.users.find(u => u.email === email)) {
-    throw new Error('Email already registered');
+function readDataFile(): DataStore {
+  try {
+    const data = fs.readFileSync(dataFile, 'utf-8');
+    return JSON.parse(data);
+  } catch (e) {
+    console.error('Error while reading data file:', e);
+    return defaultData();
   }
+}
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser: User = {
-    id: uuid(),
-    name,
-    email,
-    password: hashedPassword,
-    bio,
-    quizAnswers: [],
-    registeredEvents: []
+function defaultData(): DataStore {
+  return {
+    users: [],
+    events: [],
   };
-
-  data.users.push(newUser);
-  saveData();
-  return newUser;
 }
 
-// Login user
-async function loginUser(email: string, password: string): Promise<User> {
-  const user = data.users.find(u => u.email === email);
-  if (!user) throw new Error('Invalid email or password');
-
-  const valid = await bcrypt.compare(password, user.password);
-  if (!valid) throw new Error('Invalid email or password');
-
-  return user;
+function loadData(): DataStore {
+  return cachedData;
 }
 
-// Create a new event
-function createEvent(
-  name: string,
-  date: string,
-  time: string,
-  location: string,
-  description: string,
-  code?: number
-): Event {
-  const newEvent: Event = {
-    id: uuid(),
-    name,
-    date,
-    time,
-    location,
-    attendees: [],
-    description,
-    code: code || Math.floor(100000 + Math.random() * 900000) 
-  };
 
-  data.events.push(newEvent);
-  saveData();
-  return newEvent;
+function writeDataFile(data: DataStore): void {
+  cachedData = data; // Update memory cache
+  fs.writeFileSync(dataFile, JSON.stringify(data, null, 2));
 }
 
-// User joins an event
-function joinEvent(userId: string, eventId: string, code?: number) {
-  const user = data.users.find(u => u.id === userId);
-  const event = data.events.find(e => e.id === eventId);
+export {loadData, writeDataFile };
 
-  if (!user || !event) throw new Error('User or event not found');
-  if (code && event.code !== code) throw new Error('Invalid event code');
-
-  if (!user.registeredEvents.includes(eventId)) {
-    user.registeredEvents.push(eventId);
-  }
-
-  if (!event.attendees.includes(userId)) {
-    event.attendees.push(userId);
-  }
-
-  saveData();
-  return { user, event };
-}
-
-// Get attendees for an event
-function getEventAttendees(eventId: string): User[] {
-  const event = data.events.find(e => e.id === eventId);
-  if (!event) return [];
-
-  return event.attendees.map(uid => data.users.find(u => u.id === uid)!);
-}
-
-export {
-  getData,
-  loadData,
-  saveData,
-  registerUser,
-  loginUser,
-  createEvent,
-  joinEvent,
-  getEventAttendees
-};
