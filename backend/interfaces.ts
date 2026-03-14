@@ -13,7 +13,7 @@ export interface User {
   quizAnswers: number[];
   registeredEvents: string[]; 
   coins: number;
-  currentRecipe: Recipe; 
+  currentRecipe: Recipe | null; 
   recipeProgress: number;
   completedRecipes: number[];
 }

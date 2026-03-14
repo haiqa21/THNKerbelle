@@ -15,7 +15,10 @@ router.post('/register', async (req: Request, res: Response) => {
   if (data.users.find(u => u.email === email)) return res.status(400).json({ error: 'Email exists' });
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const newUser: User = { id: uuid(), name, email, password: hashedPassword, bio: bio || '', quizAnswers: [], registeredEvents: [] };
+  const newUser: User = { id: uuid(), name, email, password: hashedPassword, bio: bio || '', quizAnswers: [], registeredEvents: [], coins: 0,
+    currentRecipe: null, 
+    recipeProgress: 0,
+    completedRecipes: []};
   
   data.users.push(newUser);
   writeDataFile(data);
