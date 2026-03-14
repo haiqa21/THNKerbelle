@@ -1,4 +1,5 @@
 import express, { json, Request, Response } from 'express';
+import { getData, saveData } from './db/dataStore.js'
 import cors from 'cors'
 import morgan from 'morgan';
 import YAML from 'yaml';
@@ -24,5 +25,18 @@ app.get('/health', (_, res) => res.json({ status: 'ok' }))
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`)
   console.log(`   app.db auto-created next to server.js if it didn't exist`)
+})
+
+// listing all the events registered by the user
+app.get('/events', (req: Request, res: Response) => {
+  const userId = req.header('userId');
+  const data = getData();
+  const userObj: User | undefined = data.users.find(
+    (user: User) => userId === user.id);
+  if (!userObj) {
+    return res.status(401).json({ error: 'Invalid UserId' });
+  } else {
+    return res.json({ events: userObj.registeredEvents })
+  }
 })
 

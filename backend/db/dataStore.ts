@@ -1,4 +1,4 @@
-import { DataStore } from '../interfaces';
+import { DataStore } from '../interfaces.ts';
 import fs from 'fs';
 
 // YOU MAY MODIFY THIS OBJECT BELOW
