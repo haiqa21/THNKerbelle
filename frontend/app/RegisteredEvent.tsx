@@ -1,6 +1,157 @@
+// // app/(tabs)/events.tsx
+// import { useEffect, useState } from "react";
+// import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { getEvents, joinEvent } from "../lib/api";
+
+// type Event = {
+//   id: string;
+//   name: string;
+//   time: string;
+//   location: string;
+// };
+
+// export default function EventsScreen() {
+//   const [events, setEvents]     = useState<Event[]>([]);
+//   const [codes, setCodes]       = useState<{ [key: string]: string }>({});
+//   const [messages, setMessages] = useState<{ [key: string]: string }>({});
+//   const [userId, setUserId]     = useState<string | null>(null);
+
+//   // get userId from AsyncStorage first
+//   useEffect(() => {
+//     const load = async () => {
+//       const id = await AsyncStorage.getItem('userId')
+//       setUserId(id)
+//     }
+//     load()
+//   }, [])
+
+//   // then fetch events once userId is ready
+//   useEffect(() => {
+//     if (!userId) return
+//     getEvents(userId)
+//       .then(data => setEvents(data))
+//       .catch(err => console.error(err))
+//   }, [userId])
+
+//   async function handleJoinEvent(eventId: string) {
+//     try {
+//       const result = await joinEvent(eventId, userId, codes[eventId])
+
+//       if (!result.ok) {
+//         setMessages(prev => ({ ...prev, [eventId]: result.data }))
+//         return
+//       }
+
+//       setMessages(prev => ({ ...prev, [eventId]: `✅ Joined ${result.data.name}` }))
+//     } catch (err) {
+//       setMessages(prev => ({ ...prev, [eventId]: "❌ Something went wrong" }))
+//     }
+//   }
+
+//   return (
+//     <><Text style={styles.title}>Your Registered Events</Text><FlatList
+//       data={events}
+//       keyExtractor={item => item.id}
+//       contentContainerStyle={styles.container}
+//       renderItem={({ item }) => (
+//         <View style={styles.card}>
+//           <Text style={styles.title}>{item.name}</Text>
+//           <Text style={styles.detail}><Text style={styles.bold}>Time: </Text>{item.time}</Text>
+//           <Text style={styles.detail}><Text style={styles.bold}>Location: </Text>{item.location}</Text>
+
+//           <TextInput
+//             style={styles.input}
+//             placeholder="Enter event code"
+//             placeholderTextColor="#999"
+//             value={codes[item.id] || ""}
+//             onChangeText={(text) => setCodes({ ...codes, [item.id]: text })} />
+
+//           <TouchableOpacity
+//             style={styles.button}
+//             onPress={() => handleJoinEvent(item.id)}
+//           >
+//             <Text style={styles.buttonText}>Join Event</Text>
+//           </TouchableOpacity>
+
+//           {messages[item.id] && (
+//             <Text style={styles.message}>{messages[item.id]}</Text>
+//           )}
+//         </View>
+//       )} /></>
+//   )
+// }
+
+// const styles = StyleSheet.create({
+//   safeArea: {
+//     flex: 1,
+//     backgroundColor: '#f9f9f9'
+//   },
+//   container: {
+//     padding: 20,
+//     gap: 16
+//   },
+//   card: {
+//     borderWidth: 1,
+//     borderColor: '#ddd',
+//     borderRadius: 12,
+//     padding: 16,
+//     backgroundColor: '#fff',
+//     marginBottom: 16,
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.08,
+//     shadowRadius: 6,
+//     elevation: 3
+//   },
+//   title: {
+//     fontSize: 18,
+//     fontWeight: '700',
+//     color: '#333',
+//     marginBottom: 8
+//   },
+//   detail: {
+//     fontSize: 14,
+//     color: '#555',
+//     marginBottom: 4
+//   },
+//   bold: {
+//     fontWeight: '700'
+//   },
+//   input: {
+//     marginTop: 10,
+//     padding: 10,
+//     borderRadius: 8,
+//     borderWidth: 1,
+//     borderColor: '#ccc',
+//     marginBottom: 10,
+//     fontSize: 14
+//   },
+//   button: {
+//     padding: 12,
+//     borderRadius: 8,
+//     backgroundColor: '#4f46e5',
+//     alignItems: 'center'
+//   },
+//   buttonText: {
+//     color: '#fff',
+//     fontWeight: '700',
+//     fontSize: 14
+//   },
+//   message: {
+//     marginTop: 8,
+//     fontWeight: '700',
+//     color: '#111'
+//   }
+// })
+
+
+
+// app/(tabs)/events.tsx
 import { useEffect, useState } from "react";
-import { getEvents, joinEvent } from "../lib/api";  // ← import your api functions
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, SafeAreaView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getEvents, joinEvent } from "../lib/api";
 
 type Event = {
   id: string;
@@ -9,129 +160,170 @@ type Event = {
   location: string;
 };
 
-const userId = await AsyncStorage.getItem('userId');
-
-export default function Events() {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [codes, setCodes] = useState<{ [key: string]: string }>({});
+export default function EventsScreen() {
+  const [events, setEvents]     = useState<Event[]>([]);
+  const [codes, setCodes]       = useState<{ [key: string]: string }>({});
   const [messages, setMessages] = useState<{ [key: string]: string }>({});
+  const [userId, setUserId]     = useState<string | null>(null);
 
   useEffect(() => {
-    getEvents(userId)  // ← replaced inline fetch with api function
-      .then(data => setEvents(data))
-      .catch(err => console.error(err));
-  }, []);
+    const load = async () => {
+      const id = await AsyncStorage.getItem('userId')
+      console.log('userId from AsyncStorage:', id)  // ← helpful for debugging
+      setUserId(id)
+    }
+    load()
+  }, [])
+
+  useEffect(() => {
+    if (!userId) return
+    getEvents(userId)
+      .then(data => {
+        console.log('events data:', data)  // ← helpful for debugging
+        setEvents(Array.isArray(data) ? data : [])
+      })
+      .catch(err => console.error(err))
+  }, [userId])
 
   async function handleJoinEvent(eventId: string) {
     try {
-      const { data, ok } = await joinEvent(eventId, userId, codes[eventId]);  // ← replaced inline fetch
+      const result = await joinEvent(eventId, userId ?? '', codes[eventId] ?? '')
 
-      if (!ok) {
-        setMessages(prev => ({ ...prev, [eventId]: data.error }));
-        return;
+      if (!result.ok) {
+        setMessages(prev => ({ ...prev, [eventId]: result.data.error ?? '❌ Failed to join' }))
+        return
       }
 
-      setMessages(prev => ({ ...prev, [eventId]: `✅ Joined ${data.event.name}` }));
+      setMessages(prev => ({ ...prev, [eventId]: `✅ Joined ${result.data.event.name}` }))
     } catch (err) {
-      setMessages(prev => ({ ...prev, [eventId]: "❌ Something went wrong" }));
+      setMessages(prev => ({ ...prev, [eventId]: "❌ Something went wrong" }))
     }
   }
 
   return (
-    <div style={gridContainer}>
-      {events.map(event => (
-        <div key={event.id} style={cardStyle}>
-          <h3 style={titleStyle}>{event.name}</h3>
-          <p><b>Time:</b> {event.time}</p>
-          <p><b>Location:</b> {event.location}</p>
+    <SafeAreaView style={styles.safeArea}>
+      <Text style={styles.heading}>Your Registered Events</Text>
 
-          <input
-            type="text"
-            placeholder="Enter event code"
-            value={codes[event.id] || ""}
-            onChange={(e) =>
-              setCodes({ ...codes, [event.id]: e.target.value })
-            }
-            style={inputStyle}
-          />
+      {events.length === 0 ? (
+        <View style={styles.empty}>
+          <Text style={styles.emptyText}>No events yet</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={events}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.container}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <Text style={styles.title}>{item.name}</Text>
+              <Text style={styles.detail}>
+                <Text style={styles.bold}>Time: </Text>{item.time}
+              </Text>
+              <Text style={styles.detail}>
+                <Text style={styles.bold}>Location: </Text>{item.location}
+              </Text>
 
-          <button
-            onClick={() => handleJoinEvent(event.id)}
-            style={buttonStyle}
-          >
-            Join Event
-          </button>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter event code"
+                placeholderTextColor="#999"
+                value={codes[item.id] || ""}
+                onChangeText={(text) => setCodes({ ...codes, [item.id]: text })}
+              />
 
-          {messages[event.id] && (
-            <p style={messageStyle}>{messages[event.id]}</p>
+              <TouchableOpacity
+                style={styles.button}
+                onPress={() => handleJoinEvent(item.id)}
+              >
+                <Text style={styles.buttonText}>Join Event</Text>
+              </TouchableOpacity>
+
+              {messages[item.id] && (
+                <Text style={styles.message}>{messages[item.id]}</Text>
+              )}
+            </View>
           )}
-        </div>
-      ))}
-    </div>
-  );
+        />
+      )}
+    </SafeAreaView>
+  )
 }
 
-const gridContainer: React.CSSProperties = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-  gap: "20px",
-  padding: "20px",
-};
-
-const cardStyle: React.CSSProperties = {
-  border: "1px solid #ddd",
-  borderRadius: "12px",
-  padding: "16px",
-  background: "#ffffff",
-  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-  transition: "transform 0.2s, box-shadow 0.2s",
-  cursor: "pointer",
-  display: "flex",
-  flexDirection: "column",
-};
-
-const titleStyle: React.CSSProperties = {
-  marginBottom: "10px",
-  fontSize: "1.2rem",
-  color: "#333",
-};
-
-const inputStyle: React.CSSProperties = {
-  marginTop: "10px",
-  padding: "8px",
-  borderRadius: "6px",
-  border: "1px solid #ccc",
-  width: "100%",
-  marginBottom: "10px",
-};
-
-const buttonStyle: React.CSSProperties = {
-  padding: "10px 16px",
-  borderRadius: "6px",
-  border: "none",
-  backgroundColor: "#4f46e5",
-  color: "white",
-  fontWeight: "bold",
-  cursor: "pointer",
-  transition: "background-color 0.2s",
-};
-
-const messageStyle: React.CSSProperties = {
-  marginTop: "8px",
-  fontWeight: "bold",
-  color: "#111",
-};
-
-/* Hover effects using inline style workaround */
-Object.assign(cardStyle, {
-  ":hover": {
-    transform: "translateY(-4px)",
-    boxShadow: "0 8px 20px rgba(0,0,0,0.12)"
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#f9f9f9'
+  },
+  container: {
+    padding: 20,
+    gap: 16
+  },
+  heading: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#333',
+    padding: 20,
+    paddingBottom: 0
+  },
+  empty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  emptyText: {
+    color: '#999',
+    fontSize: 16
+  },
+  card: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 12,
+    padding: 16,
+    backgroundColor: '#fff',
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#333',
+    marginBottom: 8
+  },
+  detail: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 4
+  },
+  bold: {
+    fontWeight: '700'
+  },
+  input: {
+    marginTop: 10,
+    padding: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 10,
+    fontSize: 14
+  },
+  button: {
+    padding: 12,
+    borderRadius: 8,
+    backgroundColor: '#4f46e5',
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 14
+  },
+  message: {
+    marginTop: 8,
+    fontWeight: '700',
+    color: '#111'
   }
-});
-
-Object.assign(buttonStyle, {
-  ":hover": {
-    backgroundColor: "#4338ca"
-  }
-});
+})
