@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { loadData, writeDataFile } from '../db/dataStore';
-import { User } from '../interfaces';
+import { Recipe, User } from '../interfaces';
 import bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 
@@ -21,6 +21,52 @@ router.post('/register', async (req: Request, res: Response) => {
     completedRecipes: []};
   
   data.users.push(newUser);
+
+
+  const recipes: Recipe[] = [
+    {
+    id: 0,
+    name: 'Pie',
+    steps: [
+      'Mix apples with sugar and cinnamon',
+      'Assemble crust and filling',
+      'Bake in the oven!'
+    ],
+    pointCosts: [5,5,5]
+    }, 
+    {
+      id: 1,
+      name: 'Cake',
+      steps: [
+        'Mix flour, sugar, eggs, and butter',
+        'Pour into pan and bake',
+        'Frost the cake'
+      ],
+      pointCosts: [5,5,10]
+    }, 
+    {
+      id: 2,
+      name: 'Bread',
+      steps: [
+        'Mix flour, water, yeast, and salt',
+        'Let the dough rise',
+        'Bake in the oven!'
+      ],
+      pointCosts: [5,5,5]
+    }, 
+    {
+      id: 3,
+      name: 'Croissant',
+      steps: [
+        'Make the dough and let it rise',
+        'Roll out the dough and fold with butter',
+        'Shape into croissants and bake'
+      ],
+      pointCosts: [5,10,10]
+    }
+  ]
+
+  data.recipes = recipes; 
   writeDataFile(data);
 
   res.status(201).json({ message: 'Registered', userId: newUser.id });

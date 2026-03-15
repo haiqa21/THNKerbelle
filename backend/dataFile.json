@@ -1,0 +1,104 @@
+{
+  "users": [
+    {
+      "id": "928c5927-47a8-4c66-abc2-dccfd8f0f8a8",
+      "name": "hi",
+      "email": "hi",
+      "password": "$2b$10$Czwik8h1tTQDWCr9U8mX8ehTnMVV/2tY7Ft7bwJJHjREZ3HC40ykO",
+      "bio": "",
+      "quizAnswers": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "registeredEvents": [
+        {
+          "id": "iasdf-1234-5678-90ab-cdef12345678",
+          "name": "Baking Workshop",
+          "description": "Learn to bake delicious treats with us!",
+          "date": "2024-07-15T18:00:00Z",
+          "time": "18:00",
+          "location": "123 Main St, Anytown",
+          "code": "BAKE2024",
+          "attendees": ["17f3c362-0d24-4e67-a968-0b9fe4c2f9fc", "hi"]
+        }
+      ],
+      "coins": 0,
+      "currentRecipe": null,
+      "recipeProgress": 0,
+      "completedRecipes": []
+    }
+  ],
+  "events": [
+    {
+      "id": "iasdf-1234-5678-90ab-cdef12345678",
+      "name": "Baking Workshop",
+      "description": "Learn to bake delicious treats with us!",
+      "date": "2024-07-15T18:00:00Z",
+      "time": "18:00",
+      "location": "123 Main St, Anytown",
+      "code": "BAKE2024",
+      "attendees": ["17f3c362-0d24-4e67-a968-0b9fe4c2f9fc", "hi"]
+    }
+  ],
+  "recipes": [
+    {
+      "id": 0,
+      "name": "Pie",
+      "steps": [
+        "Mix apples with sugar and cinnamon",
+        "Assemble crust and filling",
+        "Bake in the oven!"
+      ],
+      "pointCosts": [
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Cake",
+      "steps": [
+        "Mix flour, sugar, eggs, and butter",
+        "Pour into pan and bake",
+        "Frost the cake"
+      ],
+      "pointCosts": [
+        5,
+        5,
+        10
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bread",
+      "steps": [
+        "Mix flour, water, yeast, and salt",
+        "Let the dough rise",
+        "Bake in the oven!"
+      ],
+      "pointCosts": [
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Croissant",
+      "steps": [
+        "Make the dough and let it rise",
+        "Roll out the dough and fold with butter",
+        "Shape into croissants and bake"
+      ],
+      "pointCosts": [
+        5,
+        10,
+        10
+      ]
+    }
+  ]
+}

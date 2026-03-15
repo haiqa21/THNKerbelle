@@ -36,7 +36,7 @@ export interface Event {
 }
 
 export interface Recipe {
-  id: string;
+  id: number;
   name: string;
 
   steps: string[];
