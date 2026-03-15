@@ -6,7 +6,7 @@ const router = Router();
 
 // Get /events - list all events
 router.get('/events', async (req: Request, res: Response) => {
-  const { userId } = req.body;
+  const  userId = String(req.query.userId);
   const data = loadData();
   const user = data.users.find(u => u.id === userId);
   if(!user){
@@ -44,7 +44,7 @@ router.post('/events/:eventId/join', (req: Request, res: Response) => {
   return res.json({ success: true, event })
 })
 
-router.post('/events/:eventId/event', (req: Request, res: Response) => {
+router.post('/events/:eventId/registeredEnterance', (req: Request, res: Response) => {
     const eventId = String(req.params.eventId);
     const {userId} = req.body
     const data = loadData();

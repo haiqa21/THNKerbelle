@@ -10,12 +10,16 @@ export interface User {
   email: string;
   password: string;
   bio: string;
+
   quizAnswers: number[];
+
   registeredEvents: string[]; 
   coins: number;
-  currentRecipe: Recipe | null; 
+
+  currentRecipe: Recipe | null;
   recipeProgress: number;
-  completedRecipes: number[];
+
+  completedRecipes: string[]; 
 }
 
 export interface Event {
@@ -24,14 +28,17 @@ export interface Event {
   date: string;
   time: string;
   location: string;
-  attendees: string[];   
+
+  attendees: string[]; 
+
   description: string;
-  code: number;
+  code: string; 
 }
 
 export interface Recipe {
   id: string;
   name: string;
+
   steps: string[];
-  pointCosts: number[]; 
+  pointCosts: number[];
 }
