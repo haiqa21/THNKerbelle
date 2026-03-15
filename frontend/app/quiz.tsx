@@ -73,7 +73,7 @@ export default function QuizScreen() {
       const data = await res.json()
 
       if (data.quizAnswers) {
-        router.replace('/bakery')
+        router.replace('/findEvents')
       } else {
         setError(data.error || 'Something went wrong')
       }
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     justifyContent: 'center',
-    backgroundColor: '#fff'
+    backgroundColor: '#f7f6e6'
   },
   progress: {
     textAlign: 'center',
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: 6,
-    backgroundColor: '#f5a623',
+    backgroundColor: '#744935',
     borderRadius: 99
   },
   question: {
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     marginBottom: 12
   },
   optionSelected: {
-    borderColor: '#f5a623',
+    borderColor: '#744935',
     backgroundColor: '#fff8ee'
   },
   optionText: {
@@ -189,12 +189,12 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   optionTextSelected: {
-    color: '#f5a623',
+    color: '#744935',
     fontWeight: '600'
   },
   button: {
     marginTop: 24,
-    backgroundColor: '#f5a623',
+    backgroundColor: '#744935',
     padding: 16,
     borderRadius: 12,
     alignItems: 'center'
