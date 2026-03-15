@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getEvents, joinEvent } from "../lib/api";  // ← import your api functions
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Event = {
   id: string;
@@ -8,7 +9,7 @@ type Event = {
   location: string;
 };
 
-const userId = "1";
+const userId = await AsyncStorage.getItem('userId');
 
 export default function Events() {
   const [events, setEvents] = useState<Event[]>([]);
