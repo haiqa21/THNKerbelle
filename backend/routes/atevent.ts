@@ -4,7 +4,6 @@ import { User } from '../interfaces';
 
 const router = Router();
 
-
 router.get('/network', (req: Request, res: Response) => {
   const { userId, eventId } = req.body;
 
