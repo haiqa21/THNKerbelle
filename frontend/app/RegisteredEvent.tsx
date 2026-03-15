@@ -55,7 +55,7 @@ export default function Events() {
           />
 
           <button
-            onClick={() => joinEvent(event.id, userId, 'code')}
+            onClick={() => handleJoinEvent(event.id)}
             style={buttonStyle}
           >
             Join Event
