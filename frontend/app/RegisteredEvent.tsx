@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { getEvents, joinEvent } from "../lib/api";  // ← import your api functions
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Event = {
   id: string;
@@ -7,7 +9,7 @@ type Event = {
   location: string;
 };
 
-const userId = "1"; // replace with real logged-in user
+const userId = await AsyncStorage.getItem('userId');
 
 export default function Events() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -15,35 +17,23 @@ export default function Events() {
   const [messages, setMessages] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
-    fetch(`http://localhost:3000/events?userId=${userId}`)
-      .then(res => res.json())
+    getEvents(userId)  // ← replaced inline fetch with api function
       .then(data => setEvents(data))
       .catch(err => console.error(err));
   }, []);
 
-  async function joinEvent(eventId: string) {
+  async function handleJoinEvent(eventId: string) {
     try {
-      const res = await fetch(`http://localhost:3000/events/${eventId}/join`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          userId,
-          code: codes[eventId]
-        })
-      });
+      const { data, ok } = await joinEvent(eventId, userId, codes[eventId]);  // ← replaced inline fetch
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setMessages({ ...messages, [eventId]: data.error });
+      if (!ok) {
+        setMessages(prev => ({ ...prev, [eventId]: data.error }));
         return;
       }
 
-      setMessages({ ...messages, [eventId]: `✅ Joined ${data.event.name}` });
+      setMessages(prev => ({ ...prev, [eventId]: `✅ Joined ${data.event.name}` }));
     } catch (err) {
-      setMessages({ ...messages, [eventId]: "❌ Something went wrong" });
+      setMessages(prev => ({ ...prev, [eventId]: "❌ Something went wrong" }));
     }
   }
 
@@ -66,7 +56,7 @@ export default function Events() {
           />
 
           <button
-            onClick={() => joinEvent(event.id)}
+            onClick={() => handleJoinEvent(event.id)}
             style={buttonStyle}
           >
             Join Event

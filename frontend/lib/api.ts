@@ -34,3 +34,28 @@ export const authLogin = async (email: string, password: string) => {
   })
   return res.json()  // ← returns whatever your backend sends back
 };
+
+//
+// api.tsx
+
+const BASE_URL = 'http://localhost:3000';
+
+// Function to fetch all events for a user
+export const getEvents = async (userId: string) => {
+  const res = await fetch(`${BASE_URL}/events?userId=${userId}`, {  // ← hits GET /events?userId=...
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  });
+  return res.json();  // ← returns array of Event objects from your backend
+};
+
+// Function to join an event with a code
+export const joinEvent = async (eventId: string, userId: string, code: string) => {
+  const res = await fetch(`${BASE_URL}/events/${eventId}/join`, {  // ← hits POST /events/:id/join
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId, code })  // ← becomes req.body in Express
+  });
+  return { data: await res.json(), ok: res.ok };  // ← returns response + ok flag for error handling
+};
+
