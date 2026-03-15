@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js",
-    "dev": "node --watch server.js",
+    "start": "tsx server.ts",
+    "dev": "tsx server.ts",
     "seed": "node database/seed.js"
   },
   "keywords": [],
@@ -27,6 +27,10 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
-    "@types/morgan": "^1.9.10"
+    "@types/morgan": "^1.9.10",
+    "@types/node": "^25.5.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
   }
 }

@@ -27,24 +27,10 @@ export const authRegister = async (name: string, email: string, password: string
 
 // Function to log in a user
 export const authLogin = async (email: string, password: string) => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Login failed');
-    }
-
-    return data; // { message: 'Login successful', user: { id, name } }
-  } catch (error) {
-    console.error('Login error:', error);
-    throw error;
-  }
+  const res = await fetch('http://localhost:3000/auth/login', {  // ← hits your backend
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })  // ← becomes req.body in Express
+  })
+  return res.json()  // ← returns whatever your backend sends back
 };

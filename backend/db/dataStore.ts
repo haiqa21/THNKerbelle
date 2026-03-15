@@ -1,4 +1,4 @@
-import { DataStore } from '../interfaces.ts';
+import { DataStore } from '../interfaces';
 import fs from 'fs';
 import path from "path";
 const dataFile = path.join(process.cwd(), 'dataFile.json');
