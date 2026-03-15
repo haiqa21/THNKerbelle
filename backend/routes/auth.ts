@@ -66,7 +66,31 @@ router.post('/register', async (req: Request, res: Response) => {
     }
   ]
 
+  const events = [
+    {
+      id: '1',
+      name: 'Sourdough Sunday',
+      date: '2024-12-01',
+      time: '15:00',
+      location: 'Central Park',
+      attendees: [],
+      description: 'Join us for a day of sourdough baking and fun in the park!',
+      code: 'SOURDOUGH123'
+    }, 
+    {
+      id: '2',
+      name: 'Pastry Picnic',
+      date: '2024-12-15',
+      time: '12:00',
+      location: 'Riverside Park',
+      attendees: [],
+      description: 'Bring your favorite pastries and enjoy a picnic by the river!',
+      code: 'PASTRY456'
+    }
+  ]
+
   data.recipes = recipes; 
+  data.events = events;
   writeDataFile(data);
 
   res.status(201).json({ message: 'Registered', userId: newUser.id });

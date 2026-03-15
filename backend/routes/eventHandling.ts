@@ -4,6 +4,42 @@ import { User } from '../interfaces';
 
 const router = Router();
 
+
+// GET /events/all — get all events
+router.get('/events/all', (req: Request, res: Response) => {
+  const data = loadData()
+  return res.json(data.events)
+})
+
+// POST /events/register — register user for an event
+router.post('/events/register', (req: Request, res: Response) => {
+  const { userId, eventId } = req.body
+
+  if (!userId || !eventId)
+    return res.status(400).json({ error: 'Missing userId or eventId' })
+
+  const data = loadData()
+
+  const user = data.users.find((u: User) => u.id === userId)
+  if (!user) return res.status(404).json({ error: 'User not found' })
+
+  const event = data.events.find((e: any) => e.id === eventId)
+  if (!event) return res.status(404).json({ error: 'Event not found' })
+
+  // check if already registered
+  if (user.registeredEvents.includes(eventId)) {
+    return res.status(400).json({ error: 'Already registered for this event' })
+  }
+
+  // add event to user's registeredEvents
+  user.registeredEvents.push(event)
+  event.attendees.push(userId) // also add user to event's attendees
+  writeDataFile(data)
+
+  return res.json({ message: 'Registered successfully', event })
+})
+
+
 // Get /events - list all events
 router.get('/events', async (req: Request, res: Response) => {
   const userId = String(req.query.userId);
@@ -11,10 +47,8 @@ router.get('/events', async (req: Request, res: Response) => {
   const user = data.users.find(u => u.id === userId);
   if (!user) return res.status(400).json({ error: 'Invalid User' });
 
-  // ← cross-reference registeredEvents IDs with full event objects
-  const userEvents = data.events.filter(e => 
-    user.registeredEvents.some((re: { id: string }) => re.id === e.id)
-  );
+  // ← cross-reference registeredEvents IDs (strings) with full event objects
+  const userEvents = user.registeredEvents; 
   return res.json(userEvents);
 });
 

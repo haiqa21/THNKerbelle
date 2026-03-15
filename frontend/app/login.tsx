@@ -31,7 +31,7 @@ export default function LoginScreen() {
         await AsyncStorage.setItem('user', JSON.stringify(data.user))
 
         // Step 3 — navigate to home
-        router.replace('/RegisteredEvent')
+        router.replace('/bakery')
       } else {
         setError(data.error || 'Something went wrong')
       }

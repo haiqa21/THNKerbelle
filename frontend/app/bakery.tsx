@@ -114,6 +114,10 @@ export default function BakeryScreen() {
         <Text style={styles.buttonText}>Go to Events</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/findEvents')}> 
+        <Text style={styles.buttonText}>Go to Events</Text>
+      </TouchableOpacity>
+
       {currentRecipe ? (
         <View style={styles.card}>
           <Text style={styles.recipeTitle}>{currentRecipe.name}</Text>
