@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { loadData, writeDataFile } from '../db/dataStore';
-import { User } from '../interfaces';
+import { Recipe, User } from '../interfaces';
 import bcrypt from 'bcryptjs';
 import { v4 as uuid } from 'uuid';
 
@@ -21,6 +21,76 @@ router.post('/register', async (req: Request, res: Response) => {
     completedRecipes: []};
   
   data.users.push(newUser);
+
+
+  const recipes: Recipe[] = [
+    {
+    id: 0,
+    name: 'Pie',
+    steps: [
+      'Mix apples with sugar and cinnamon',
+      'Assemble crust and filling',
+      'Bake in the oven!'
+    ],
+    pointCosts: [5,5,5]
+    }, 
+    {
+      id: 1,
+      name: 'Cake',
+      steps: [
+        'Mix flour, sugar, eggs, and butter',
+        'Pour into pan and bake',
+        'Frost the cake'
+      ],
+      pointCosts: [5,5,10]
+    }, 
+    {
+      id: 2,
+      name: 'Bread',
+      steps: [
+        'Mix flour, water, yeast, and salt',
+        'Let the dough rise',
+        'Bake in the oven!'
+      ],
+      pointCosts: [5,5,5]
+    }, 
+    {
+      id: 3,
+      name: 'Croissant',
+      steps: [
+        'Make the dough and let it rise',
+        'Roll out the dough and fold with butter',
+        'Shape into croissants and bake'
+      ],
+      pointCosts: [5,10,10]
+    }
+  ]
+
+  const events = [
+    {
+      id: '1',
+      name: 'Sourdough Sunday',
+      date: '2024-12-01',
+      time: '15:00',
+      location: 'Central Park',
+      attendees: [],
+      description: 'Join us for a day of sourdough baking and fun in the park!',
+      code: 'SOURDOUGH123'
+    }, 
+    {
+      id: '2',
+      name: 'Pastry Picnic',
+      date: '2024-12-15',
+      time: '12:00',
+      location: 'Riverside Park',
+      attendees: [],
+      description: 'Bring your favorite pastries and enjoy a picnic by the river!',
+      code: 'PASTRY456'
+    }
+  ]
+
+  data.recipes = recipes; 
+  data.events = events;
   writeDataFile(data);
 
   res.status(201).json({ message: 'Registered', userId: newUser.id });

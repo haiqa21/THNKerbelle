@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 
 type Person = {
@@ -13,6 +14,14 @@ const eventId = "123"; // replace with current event
 export default function MatchedFriends() {
   const [people, setPeople] = useState<Person[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+    const load = async () => {
+      const id = await AsyncStorage.getItem('userId')
+      console.log('userId from AsyncStorage:', id)  // ← helpful for debugging
+    }
+    load()
+  }, [])
 
   useEffect(() => {
     fetch(`http://localhost:3000/events/${eventId}/registeredEnterance`, {

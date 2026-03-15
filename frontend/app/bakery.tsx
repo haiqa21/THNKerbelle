@@ -9,14 +9,10 @@ import {
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Progress from 'react-native-progress'
+import { Recipe } from '../../backend/interfaces'
+import { router } from 'expo-router/build/exports'
 
 const API = 'http://YOUR_IP:3000/bakery'
-
-interface Recipe {
-  id: number
-  name: string
-  steps: string[]
-}
 
 export default function BakeryScreen() {
   const [recipes, setRecipes] = useState<Recipe[]>([])
@@ -113,6 +109,14 @@ export default function BakeryScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Bakery 🍰</Text>
+      {/* go to registerdEvent page*/}
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/RegisteredEvent')}> 
+        <Text style={styles.buttonText}>Go to Events</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/findEvents')}> 
+        <Text style={styles.buttonText}>Go to Events</Text>
+      </TouchableOpacity>
 
       {currentRecipe ? (
         <View style={styles.card}>

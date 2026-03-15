@@ -6,6 +6,7 @@ import morgan from 'morgan';
 import process from 'process';
 import authRoutes from './routes/auth'
 import quizRoutes from './routes/quiz'
+import eventRoutes from './routes/eventHandling'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -17,6 +18,7 @@ app.use(morgan('dev'));
 // Routes
 app.use('/auth', authRoutes)
 app.use('/quiz', quizRoutes);
+app.use('/', eventRoutes)
 
 
 // Health check — useful for Railway/Render deployment
