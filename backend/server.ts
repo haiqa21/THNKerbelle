@@ -4,7 +4,8 @@ import { User } from './interfaces';
 import cors from 'cors'
 import morgan from 'morgan';
 import process from 'process';
-import authRoutes from './routes/auth.ts'
+import authRoutes from './routes/auth'
+import quizRoutes from './routes/quiz'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -15,6 +16,7 @@ app.use(json())            // parse JSON request bodies
 app.use(morgan('dev'));
 // Routes
 app.use('/auth', authRoutes)
+app.use('/quiz', quizRoutes);
 
 
 // Health check — useful for Railway/Render deployment
