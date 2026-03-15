@@ -11,6 +11,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Progress from 'react-native-progress'
 import { Recipe } from '../../backend/interfaces'
 import { router } from 'expo-router/build/exports'
+import { getRecipes, getCurrentRecipe, startRecipe, cookStep } from '../lib/api';
+
 
 const API = 'http://YOUR_IP:3000/bakery'
 
@@ -32,67 +34,37 @@ export default function BakeryScreen() {
 
   const loadData = async () => {
     try {
-      const token = await AsyncStorage.getItem('token')
+      const userId = await AsyncStorage.getItem('userId') ?? '';  // ← use userId not token
+      const recipesData = await getRecipes();
+      setRecipes(recipesData);
 
-      const recipesRes = await fetch(`${API}/recipes`)
-      const recipesData: Recipe[] = await recipesRes.json()
-      setRecipes(recipesData)
-
-      const currentRes = await fetch(`${API}/currentRecipe`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      const currentData = await currentRes.json()
-      setCurrentRecipe(currentData.recipe)
-      setProgress(currentData.progress ?? 0)
+      const currentData = await getCurrentRecipe(userId);
+      setCurrentRecipe(currentData.recipe);
+      setProgress(currentData.progress ?? 0);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const startRecipe = async (recipeId: number) => {
-    const token = await AsyncStorage.getItem('token')
+  const handleStartRecipe = async (recipeId: number) => {
+    const userId = await AsyncStorage.getItem('userId') ?? '';
+    await startRecipe(userId, recipeId);
+    loadData();
+  };
 
-    await fetch(`${API}/startRecipe`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify({ recipeId })
-    })
-
-    loadData()
-  }
-
-  const cookStep = async () => {
-    if (!currentRecipe) return
-
-    setCooking(true)
-
+  const handleCookStep = async () => {
+    if (!currentRecipe) return;
+    setCooking(true);
     setTimeout(async () => {
-      const token = await AsyncStorage.getItem('token')
-
-      const res = await fetch(`${API}/cook`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          recipeId: currentRecipe.id
-        })
-      })
-
-      const data = await res.json()
-      setMessage(data.message)
-      setCooking(false)
-      loadData()
-    }, 2000)
-  }
+      const userId = await AsyncStorage.getItem('userId') ?? '';
+      const data = await cookStep(userId, currentRecipe.id);
+      setMessage(data.message);
+      setCooking(false);
+      loadData();
+    }, 2000);
+  };
 
   if (loading) {
     return (
@@ -144,7 +116,7 @@ export default function BakeryScreen() {
           {cooking ? (
             <Text style={styles.cooking}>Baking in the oven... 🔥</Text>
           ) : (
-            <TouchableOpacity style={styles.button} onPress={cookStep}>
+            <TouchableOpacity style={styles.button} onPress={handleCookStep}>
               <Text style={styles.buttonText}>Cook Next Step 🍳</Text>
             </TouchableOpacity>
           )}
@@ -165,7 +137,7 @@ export default function BakeryScreen() {
 
                 <TouchableOpacity
                   style={styles.button}
-                  onPress={() => startRecipe(item.id)}
+                  onPress={() => handleStartRecipe(item.id)}
                 >
                   <Text style={styles.buttonText}>Start Cooking</Text>
                 </TouchableOpacity>

@@ -72,3 +72,47 @@ export const registerForEvent = async (userId: string, eventId: string) => {
   })
   return { data: await res.json(), ok: res.ok }
 }
+
+
+
+// ── Bakery ────────────────────────────────────────────────
+
+// Get all available recipes
+export const getRecipes = async () => {
+  const res = await fetch(`${API_BASE_URL}/bakery/recipes`);
+  return res.json();  // ← returns Recipe[]
+};
+
+// Get the current user's active recipe + progress
+export const getCurrentRecipe = async (userId: string) => {
+  const res = await fetch(`${API_BASE_URL}/bakery/currentRecipe`, {
+    headers: { Authorization: `Bearer ${userId}` }  // ← sends userId as token
+  });
+  return res.json();  // ← returns { recipe: Recipe | null, progress: number }
+};
+
+// Start a new recipe for the user
+export const startRecipe = async (userId: string, recipeId: number) => {
+  const res = await fetch(`${API_BASE_URL}/bakery/startRecipe`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${userId}`
+    },
+    body: JSON.stringify({ recipeId })
+  });
+  return res.json();
+};
+
+// Cook the next step of the current recipe
+export const cookStep = async (userId: string, recipeId: number) => {
+  const res = await fetch(`${API_BASE_URL}/bakery/cook`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${userId}`
+    },
+    body: JSON.stringify({ recipeId })
+  });
+  return res.json();  // ← returns { message: string }
+};
