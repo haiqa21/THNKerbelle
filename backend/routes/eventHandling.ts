@@ -6,13 +6,16 @@ const router = Router();
 
 // Get /events - list all events
 router.get('/events', async (req: Request, res: Response) => {
-  const  userId = String(req.query.userId);
+  const userId = String(req.query.userId);
   const data = loadData();
   const user = data.users.find(u => u.id === userId);
-  if(!user){
-    return res.status(400).json({ error: 'Invalid User' });
-  }
-  return res.json(user?.registeredEvents)
+  if (!user) return res.status(400).json({ error: 'Invalid User' });
+
+  // ← cross-reference registeredEvents IDs with full event objects
+  const userEvents = data.events.filter(e => 
+    user.registeredEvents.some((re: { id: string }) => re.id === e.id)
+  );
+  return res.json(userEvents);
 });
 
 router.post('/events/:eventId/join', (req: Request, res: Response) => {
