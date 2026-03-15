@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as Progress from 'react-native-progress'
 import { Recipe } from '../../backend/interfaces'
 import { router } from 'expo-router/build/exports'
+import NavBar from './NavBar'
 
 const API = 'http://YOUR_IP:3000/bakery'
 
@@ -174,6 +175,7 @@ export default function BakeryScreen() {
           />
         </>
       )}
+      <NavBar />
     </View>
   )
 }
@@ -186,6 +188,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
+    justifyContent: 'center',
     backgroundColor: '#f7f6e6'
   },
   center: {
@@ -223,14 +226,14 @@ const styles = StyleSheet.create({
     color: '#888'
   },
   button: {
-    backgroundColor: '#f5a623',
+    backgroundColor: '#744935',
     padding: 14,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 12
   },
   buttonText: {
-    color: '#fff',
+    color: '#f7f6e6',
     fontWeight: '700'
   },
   message: {

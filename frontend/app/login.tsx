@@ -31,7 +31,7 @@ export default function LoginScreen() {
         await AsyncStorage.setItem('user', JSON.stringify(data.user))
 
         // Step 3 — navigate to home
-        router.replace('/bakery')
+        router.replace('/findEvents')
       } else {
         setError(data.error || 'Something went wrong')
       }
@@ -44,7 +44,8 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Baking Bonds! 🍞</Text>
+      <Text style={styles.title}>WELCOME TO {'\n'} BAKING BONDS! 🍞</Text>
+      
       {error ? <Text style={styles.error}>{error}</Text> : null}
       <TextInput style={styles.input} placeholder="Email" placeholderTextColor="#F2E6B3" value={email} onChangeText={setEmail} autoCapitalize="none" />
       <TextInput style={styles.input} placeholder="Password" placeholderTextColor="#F2E6B3" value={password} onChangeText={setPassword} secureTextEntry />
@@ -64,7 +65,7 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container:  { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#F2E6B3' },
-  title:      { fontSize: 28, fontWeight: '700', marginBottom: 32, textAlign: 'center' },
+  title:      { fontSize: 28, fontWeight: '700', marginBottom: 32, textAlign: 'center', fontFamily: 'RubikBurned', color: '#744935' },
   input:      { color: '#fff', borderWidth: 1.5, borderColor: '#744935', borderRadius: 12, padding: 14, marginBottom: 12, fontSize: 16, backgroundColor: '#b16e4f' },
   button:     { backgroundColor: '#744935', padding: 16, borderRadius: 12, alignItems: 'center', marginTop: 8 },
   buttonText: { color: '#fff', fontSize: 16, fontWeight: '700' },

@@ -1,9 +1,11 @@
 // app/(tabs)/events.tsx
 import { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, SafeAreaView } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getEvents, joinEvent } from "../lib/api";
 import { router } from "expo-router";
+import NavBar from './NavBar'
 
 type Event = {
   id: string;
@@ -46,7 +48,9 @@ export default function EventsScreen() {
         return
       }
 
+      // ✅ success — navigate to atEvent page, pass the eventId
       setMessages(prev => ({ ...prev, [eventId]: `✅ Joined ${result.data.event.name}` }))
+      router.push(`/atEvent?eventId=${result.data.event.id}`)
     } catch (err) {
       setMessages(prev => ({ ...prev, [eventId]: "❌ Something went wrong" }))
     }
@@ -98,8 +102,11 @@ export default function EventsScreen() {
               )}
             </View>
           )}
+          
         />
+        
       )}
+      <NavBar/>
     </SafeAreaView>
   )
 }
@@ -107,7 +114,8 @@ export default function EventsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f9f9f9'
+    backgroundColor: '#f7f6e6',
+    paddingTop: 20
   },
   container: {
     padding: 20,
@@ -118,7 +126,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#333',
     padding: 20,
-    paddingBottom: 0
+    paddingBottom: 8, 
+    fontFamily: 'RubikBurned'
   },
   empty: {
     flex: 1,
@@ -131,10 +140,10 @@ const styles = StyleSheet.create({
   },
   card: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#744935',
     borderRadius: 12,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#fff4c9',
     marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -168,7 +177,8 @@ const styles = StyleSheet.create({
   button: {
     padding: 12,
     borderRadius: 8,
-    backgroundColor: '#4f46e5',
+    backgroundColor: '#744935',
+    color: '#fff',
     alignItems: 'center'
   },
   buttonText: {

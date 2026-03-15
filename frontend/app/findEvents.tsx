@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getAllEvents, registerForEvent } from '../lib/api'
+import NavBar from './NavBar'
 
 type Event = {
   id: string
@@ -191,10 +192,11 @@ export default function FindEventsScreen() {
                 </TouchableOpacity>
               </>
             )}
-
           </View>
         </View>
+
       </Modal>
+     <NavBar />
 
     </SafeAreaView>
   )
@@ -203,7 +205,8 @@ export default function FindEventsScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#f9f9f9'
+    backgroundColor: '#f7f6e6',
+    paddingTop: 20
   },
   center: {
     flex: 1,
@@ -215,14 +218,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#333',
     padding: 20,
-    paddingBottom: 8
+    paddingBottom: 8, 
+    fontFamily: 'RubikBurned'
   },
   list: {
     padding: 20,
     gap: 12
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#fff4c9',
+    borderColor: '#744935',
+    borderWidth: 1,
     borderRadius: 14,
     padding: 16,
     marginBottom: 12,

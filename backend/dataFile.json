@@ -1,0 +1,187 @@
+{
+  "users": [
+    {
+      "id": "21bbb628-155f-4559-b540-47f274196655",
+      "name": "tinkerbell",
+      "email": "tink@gmail.com",
+      "password": "$2b$10$poyLFKDW/32iYfqBFcpqU.wjPx8hfoCUSyHb.XzkO61AeYuYNtbEq",
+      "bio": "Hi！",
+      "quizAnswers": [
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "registeredEvents": [
+        {
+          "id": "1",
+          "name": "Sourdough Sunday",
+          "date": "2024-12-01",
+          "time": "15:00",
+          "location": "Central Park",
+          "attendees": [
+            "21bbb628-155f-4559-b540-47f274196655"
+          ],
+          "description": "Join us for a day of sourdough baking and fun in the park!",
+          "code": "SOURDOUGH123"
+        }
+      ],
+      "coins": 0,
+      "currentRecipe": null,
+      "recipeProgress": 0,
+      "completedRecipes": []
+    },
+    {
+      "id": "1a7f04b2-a2e7-49f0-a353-ef4fde573fc5",
+      "name": "katelyn",
+      "email": "kate@gmail.com",
+      "password": "$2b$10$CgZ8hg.fJ3LVHbhq/8Ypuen6u4zg5NGGZkPGGfxJWMVkqx7SCspEi",
+      "bio": "",
+      "quizAnswers": [
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "registeredEvents": [
+        {
+          "id": "1",
+          "name": "Sourdough Sunday",
+          "date": "2024-12-01",
+          "time": "15:00",
+          "location": "Central Park",
+          "attendees": [
+            "1a7f04b2-a2e7-49f0-a353-ef4fde573fc5",
+            "21bbb628-155f-4559-b540-47f274196655"
+          ],
+          "description": "Join us for a day of sourdough baking and fun in the park!",
+          "code": "SOURDOUGH123"
+        }
+      ],
+      "coins": 0,
+      "currentRecipe": null,
+      "recipeProgress": 0,
+      "completedRecipes": []
+    },
+    {
+      "id": "01835d7d-2cf4-4023-9490-3ef0fcfe1603",
+      "name": "nicole",
+      "email": "nic@gmail.com",
+      "password": "$2b$10$0M7PcxUeMbJLggvJJyEiuOmeg58gkBZgHgYKtGdPiSBmvlHxdwkUy",
+      "bio": "",
+      "quizAnswers": [
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      "registeredEvents": [
+        {
+          "id": "1",
+          "name": "Sourdough Sunday",
+          "date": "2024-12-01",
+          "time": "15:00",
+          "location": "Central Park",
+          "attendees": [
+            "01835d7d-2cf4-4023-9490-3ef0fcfe1603",
+            "1a7f04b2-a2e7-49f0-a353-ef4fde573fc5",
+            "21bbb628-155f-4559-b540-47f274196655"
+          ],
+          "description": "Join us for a day of sourdough baking and fun in the park!",
+          "code": "SOURDOUGH123"
+        }
+      ],
+      "coins": 0,
+      "currentRecipe": null,
+      "recipeProgress": 0,
+      "completedRecipes": []
+    }
+  ],
+  "events": [
+    {
+      "id": "1",
+      "name": "Sourdough Sunday",
+      "date": "2024-12-01",
+      "time": "15:00",
+      "location": "Central Park",
+      "attendees": [
+        "01835d7d-2cf4-4023-9490-3ef0fcfe1603",
+        "1a7f04b2-a2e7-49f0-a353-ef4fde573fc5",
+        "21bbb628-155f-4559-b540-47f274196655"
+      ],
+      "description": "Join us for a day of sourdough baking and fun in the park!",
+      "code": "SOURDOUGH123"
+    },
+    {
+      "id": "2",
+      "name": "Pastry Picnic",
+      "date": "2024-12-15",
+      "time": "12:00",
+      "location": "Riverside Park",
+      "attendees": [],
+      "description": "Bring your favorite pastries and enjoy a picnic by the river!",
+      "code": "PASTRY456"
+    }
+  ],
+  "recipes": [
+    {
+      "id": 0,
+      "name": "Pie",
+      "steps": [
+        "Mix apples with sugar and cinnamon",
+        "Assemble crust and filling",
+        "Bake in the oven!"
+      ],
+      "pointCosts": [
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Cake",
+      "steps": [
+        "Mix flour, sugar, eggs, and butter",
+        "Pour into pan and bake",
+        "Frost the cake"
+      ],
+      "pointCosts": [
+        5,
+        5,
+        10
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Bread",
+      "steps": [
+        "Mix flour, water, yeast, and salt",
+        "Let the dough rise",
+        "Bake in the oven!"
+      ],
+      "pointCosts": [
+        5,
+        5,
+        5
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Croissant",
+      "steps": [
+        "Make the dough and let it rise",
+        "Roll out the dough and fold with butter",
+        "Shape into croissants and bake"
+      ],
+      "pointCosts": [
+        5,
+        10,
+        10
+      ]
+    }
+  ]
+}
