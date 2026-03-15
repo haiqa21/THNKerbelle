@@ -4,7 +4,6 @@ import path from "path";
 const dataFile = path.join(process.cwd(), 'dataFile.json');
 
 
-
 // YOU MAY MODIFY THIS OBJECT ABOVE
 
 // YOU SHOULDNT NEED TO MODIFY THE FUNCTIONS BELOW IN ITERATION 1
@@ -50,7 +49,6 @@ function defaultData(): DataStore {
 function loadData(): DataStore {
   return cachedData;
 }
-
 
 function writeDataFile(data: DataStore): void {
   cachedData = data; // Update memory cache

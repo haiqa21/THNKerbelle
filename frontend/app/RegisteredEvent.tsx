@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useEffect, useState } from "react";
 
 type Event = {
@@ -8,12 +7,12 @@ type Event = {
   location: string;
 };
 
-const userId = "1"; // replace later with logged-in user
+const userId = "1"; // replace with real logged-in user
 
 export default function Events() {
   const [events, setEvents] = useState<Event[]>([]);
   const [codes, setCodes] = useState<{ [key: string]: string }>({});
-  const [message, setMessage] = useState<string>("");
+  const [messages, setMessages] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     fetch(`http://localhost:3000/events?userId=${userId}`)
@@ -38,21 +37,21 @@ export default function Events() {
       const data = await res.json();
 
       if (!res.ok) {
-        setMessage(data.error);
+        setMessages({ ...messages, [eventId]: data.error });
         return;
       }
 
-      setMessage(`Successfully joined ${data.event.name}`);
+      setMessages({ ...messages, [eventId]: `✅ Joined ${data.event.name}` });
     } catch (err) {
-      setMessage("Something went wrong");
+      setMessages({ ...messages, [eventId]: "❌ Something went wrong" });
     }
   }
 
   return (
-    <div style={containerStyle}>
+    <div style={gridContainer}>
       {events.map(event => (
         <div key={event.id} style={cardStyle}>
-          <h3>{event.name}</h3>
+          <h3 style={titleStyle}>{event.name}</h3>
           <p><b>Time:</b> {event.time}</p>
           <p><b>Location:</b> {event.location}</p>
 
@@ -66,46 +65,83 @@ export default function Events() {
             style={inputStyle}
           />
 
-          <button onClick={() => joinEvent(event.id)} style={buttonStyle}>
+          <button
+            onClick={() => joinEvent(event.id)}
+            style={buttonStyle}
+          >
             Join Event
           </button>
+
+          {messages[event.id] && (
+            <p style={messageStyle}>{messages[event.id]}</p>
+          )}
         </div>
       ))}
-
-      {message && <p style={messageStyle}>{message}</p>}
     </div>
   );
 }
 
-const containerStyle: React.CSSProperties = {
+const gridContainer: React.CSSProperties = {
   display: "grid",
-  gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
   gap: "20px",
-  padding: "20px"
+  padding: "20px",
 };
 
 const cardStyle: React.CSSProperties = {
   border: "1px solid #ddd",
-  borderRadius: "10px",
+  borderRadius: "12px",
   padding: "16px",
-  background: "white",
-  boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
+  background: "#ffffff",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+  transition: "transform 0.2s, box-shadow 0.2s",
+  cursor: "pointer",
+  display: "flex",
+  flexDirection: "column",
+};
+
+const titleStyle: React.CSSProperties = {
+  marginBottom: "10px",
+  fontSize: "1.2rem",
+  color: "#333",
 };
 
 const inputStyle: React.CSSProperties = {
   marginTop: "10px",
   padding: "8px",
+  borderRadius: "6px",
+  border: "1px solid #ccc",
   width: "100%",
-  marginBottom: "10px"
+  marginBottom: "10px",
 };
 
 const buttonStyle: React.CSSProperties = {
-  padding: "8px 12px",
-  cursor: "pointer"
+  padding: "10px 16px",
+  borderRadius: "6px",
+  border: "none",
+  backgroundColor: "#4f46e5",
+  color: "white",
+  fontWeight: "bold",
+  cursor: "pointer",
+  transition: "background-color 0.2s",
 };
 
 const messageStyle: React.CSSProperties = {
-  gridColumn: "1 / -1",
-  textAlign: "center",
-  fontWeight: "bold"
+  marginTop: "8px",
+  fontWeight: "bold",
+  color: "#111",
 };
+
+/* Hover effects using inline style workaround */
+Object.assign(cardStyle, {
+  ":hover": {
+    transform: "translateY(-4px)",
+    boxShadow: "0 8px 20px rgba(0,0,0,0.12)"
+  }
+});
+
+Object.assign(buttonStyle, {
+  ":hover": {
+    backgroundColor: "#4338ca"
+  }
+});
